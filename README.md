@@ -1,5 +1,8 @@
 # Ex-5-RECOGNITION-OF-THE-GRAMMAR-anb-where-n-10-USING-YACC
-## RECOGNITION OF THE GRAMMAR(anb where n>=10) USING YACC
+RECOGNITION OF THE GRAMMAR(anb where n>=10) USING YACC
+### REGISTER NUMBER: 212223220029
+### NAME: HARI PRIYA S
+### Date: 17.10.2024
 # Aim:
 To write a YACC program to recognize the grammar anb where n>=10.
 # ALGORITHM
@@ -12,54 +15,66 @@ To write a YACC program to recognize the grammar anb where n>=10.
 7.	Compile these with the C compiler as gcc lex.yy.c y.tab.c
 8.	Enter a string as input and it is identified as valid or invalid.
 # PROGRAM:
-### Grammar.l
+### ex5.l
 ```
 %{
 #include "y.tab.h"
+#include <stdio.h>
 %}
 
+/* Rule Section */
 %%
-a    { return A; }  // Recognize 'a' as token A
-b    { return B; }  // Recognize 'b' as token B
-.    { return 0; }  // End of input
+
+[aA] { return A; }
+[bB] { return B; }
+\n { return NL; }
+. { /* Ignore any other characters */ }
+
 %%
+
 
 int yywrap() {
     return 1;
 }
 ```
-
-
-### Grammar.y
+### ex5.y
 ```
 %{
 #include <stdio.h>
+#include <stdlib.h>
+
+void yyerror(char *s);
 int yylex(void);
-void yyerror(const char *s);
 %}
 
-%token A B
+%token A B NL
 
-%%
-S   : A A A A A A A A A A B    { printf("Valid string\n"); }
-    | A S B                    { printf("Valid string\n"); }
-    ;
+%% 
 
-%%
+stmt: S NL { printf("Valid string\n"); exit(0); }
+;
 
-int main() {
-    printf("Enter a string:\n");
-    yyparse();
-    return 0;
+S: A S B | /* Allow for empty production */
+  
+;
+
+%% 
+
+void yyerror(char *s) {
+    fprintf(stderr, "Invalid string\n");
 }
 
-void yyerror(const char *s) {
-    printf("Invalid string\n");
+int main() {
+    printf("Enter the string:");
+    yyparse();
+    return 0;
 }
 ```
 
 # OUTPUT
-![image](https://github.com/user-attachments/assets/30bba7c3-a62c-4541-b7b4-e85dd78eafff)
+![380965464-9946c121-b2b0-49b4-bf93-46537be0814e](https://github.com/user-attachments/assets/88cfac05-44be-4cb6-955c-9e49224c1312)
+
+
 
 # RESULT
 The YACC program to recognize the grammar anb where n>=10 is executed successfully and the output is verified.
